@@ -4,17 +4,29 @@ import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import useFetch from "@/hooks/useFeatch";
 import { fetchMovies } from "@/services/api";
-import { useRouter } from "expo-router";
-import { ActivityIndicator, FlatList, Image, View } from "react-native";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
 
 const Search = () => {
-  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const {
     data: movies,
-    loading: moviesLoading,
-    error: moviesError,
-  } = useFetch(() => fetchMovies({ query: "" }));
+    loading,
+    error,
+    refeatch: loadMovies,
+    reset,
+  } = useFetch(() => fetchMovies({ query: searchQuery }), false);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(async () => {
+      if (searchQuery.trim()) {
+        await loadMovies();
+      } else {
+        reset();
+      }
+    }, 1000);
+  }, [searchQuery]);
 
   return (
     <View className="flex-1 bg-primary">
@@ -40,15 +52,31 @@ const Search = () => {
             </View>
 
             <View className="my-5">
-              <SearchBar placeholder="Search movies ..." />
+              <SearchBar
+                placeholder="Search movies ..."
+                value={searchQuery}
+                onChangeText={(text: string) => setSearchQuery(text)}
+              />
             </View>
 
-            {moviesLoading && (
+            {loading && (
               <ActivityIndicator
                 className="my-3"
                 size="large"
                 color="#0000FF"
               />
+            )}
+            {error && (
+              <Text className="text-red-500 px-5 my-3">
+                Error: {error.message}
+              </Text>
+            )}
+
+            {!loading && !error && searchQuery.trim() && movies?.length > 0 && (
+              <Text className="text-xl text-white font-bol">
+                Search Results for {""}
+                <Text className="text-accent">{searchQuery}</Text>
+              </Text>
             )}
           </>
         }
