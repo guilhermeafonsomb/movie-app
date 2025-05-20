@@ -25,7 +25,9 @@ const Search = () => {
       } else {
         reset();
       }
-    }, 1000);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
   }, [searchQuery]);
 
   return (
@@ -83,6 +85,15 @@ const Search = () => {
         data={movies}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <MovieCard {...item} />}
+        ListEmptyComponent={
+          !loading && !error ? (
+            <View className="mt-10 px-5">
+              <Text className="text-center text-gray-500">
+                {searchQuery.trim() ? "No movies found" : "Search for a movie"}
+              </Text>
+            </View>
+          ) : null
+        }
       />
     </View>
   );
