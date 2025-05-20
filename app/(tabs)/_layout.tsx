@@ -19,7 +19,7 @@ const TabIcon = ({ focused, icon, title }: any) => {
     );
   } else {
     return (
-      <View className="size-full justify-center items-center mt-4 rounded-full">
+      <View className="size-full justify-center items-center mt-5 rounded-full">
         <Image source={icon} tintColor="#A8B5DB" className="size-5" />
       </View>
     );
@@ -41,10 +41,12 @@ const _Layout = () => {
           backgroundColor: "#0F0D23",
           borderRadius: 50,
           marginHorizontal: 10,
-          marginBottom: 10,
+          marginBottom: 36,
           height: 52,
           position: "absolute",
           overflow: "hidden",
+          borderWidth: 1,
+          borderColor: "#0F0D23",
         },
       }}
     >
