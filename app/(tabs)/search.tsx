@@ -5,11 +5,12 @@ import { images } from "@/constants/images";
 import useFetch from "@/hooks/useFeatch";
 import { fetchMovies } from "@/services/api";
 import { updateSearchCount } from "@/services/appwrite";
-import { useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const deferredSearchQuery = useDeferredValue(searchQuery);
 
   const {
     data: movies = [],
@@ -17,25 +18,26 @@ const Search = () => {
     error,
     refeatch: loadMovies,
     reset,
-  } = useFetch(() => fetchMovies({ query: searchQuery }), false);
+  } = useFetch(() => fetchMovies({ query: deferredSearchQuery }), false);
 
   useEffect(() => {
-    const timeoutId = setTimeout(async () => {
-      if (searchQuery.trim()) {
+    const fetchMovies = async () => {
+      console.log(deferredSearchQuery, "deferredSearchQuery");
+      if (deferredSearchQuery.trim()) {
         await loadMovies();
       } else {
         reset();
       }
-    }, 500);
+    };
 
-    return () => clearTimeout(timeoutId);
-  }, [searchQuery]);
+    fetchMovies();
+  }, [deferredSearchQuery]);
 
   useEffect(() => {
     if (movies?.length > 0 && movies?.[0]) {
-      updateSearchCount(searchQuery, movies[0]);
+      updateSearchCount(deferredSearchQuery, movies[0]);
     }
-  }, [movies]);
+  }, [movies, deferredSearchQuery]);
 
   return (
     <View className="flex-1 bg-primary">
