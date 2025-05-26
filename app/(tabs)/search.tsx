@@ -5,7 +5,7 @@ import { images } from "@/constants/images";
 import useFetch from "@/hooks/useFeatch";
 import { fetchMovies } from "@/services/api";
 import { updateSearchCount } from "@/services/appwrite";
-import { useDeferredValue, useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
 
 const Search = () => {
@@ -20,17 +20,13 @@ const Search = () => {
     reset,
   } = useFetch(() => fetchMovies({ query: deferredSearchQuery }), false);
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      console.log(deferredSearchQuery, "deferredSearchQuery");
-      if (deferredSearchQuery.trim()) {
-        await loadMovies();
-      } else {
-        reset();
-      }
-    };
-
-    fetchMovies();
+  useMemo(async () => {
+    if (deferredSearchQuery.trim()) {
+      console.log("Fetching movies for query:", deferredSearchQuery);
+      await loadMovies();
+    } else {
+      reset();
+    }
   }, [deferredSearchQuery]);
 
   useEffect(() => {
