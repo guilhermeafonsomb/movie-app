@@ -11,7 +11,7 @@ import {
 
 interface ButtonOpacityProps extends TouchableOpacityProps {
   icon?: any;
-  children: string;
+  children: React.ReactNode;
 }
 
 const ButtonOpacity = ({
