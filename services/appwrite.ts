@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Query } from "react-native-appwrite";
+import { Account, Client, Databases, ID, Query } from "react-native-appwrite";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
@@ -6,6 +6,8 @@ const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
   .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!);
+
+const account = new Account(client);
 
 const database = new Databases(client);
 
@@ -53,5 +55,39 @@ export const getTrendingMovies = async (): Promise<
   } catch (error) {
     console.log("Error: ", error);
     throw undefined;
+  }
+};
+
+export const signin = async (
+  email: string,
+  password: string
+): Promise<User> => {
+  try {
+    await account.createEmailPasswordSession(email, password);
+    const user = await account.get();
+
+    return { id: user.$id, name: user.name, email: user.email };
+  } catch (error) {
+    console.log("Error signing in:", error);
+    throw error;
+  }
+};
+
+export const getSession = async (): Promise<AccountSession | null> => {
+  try {
+    const session = await account.getSession("current");
+    return session ? { id: session.$id, expire: session.expire } : null;
+  } catch (error) {
+    console.log("Error getting session:", error);
+    throw error;
+  }
+};
+
+export const logout = async (sessionId: string): Promise<void> => {
+  try {
+    await account.deleteSession(sessionId);
+  } catch (error) {
+    console.log("Error logging out:", error);
+    throw error;
   }
 };

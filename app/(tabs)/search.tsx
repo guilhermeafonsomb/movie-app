@@ -22,7 +22,6 @@ const Search = () => {
 
   useMemo(async () => {
     if (deferredSearchQuery.trim()) {
-      console.log("Fetching movies for query:", deferredSearchQuery);
       await loadMovies();
     } else {
       reset();
