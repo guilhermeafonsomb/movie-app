@@ -16,10 +16,14 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npx expo start
    ```
 
-## Techs
-
-- [Nativewind](https://www.nativewind.dev/)
-
 ## Description
 
 This project will evolve over time, I am using it as a case study
+
+## Techs
+
+- [Nativewind](https://www.nativewind.dev/)
+- [Expo Go](https://expo.dev/go)
+- [TypeScript](https://www.typescriptlang.org/)
+- [expo/vector-icons](https://docs.expo.dev/guides/icons/)
+- [Appwrite](https://appwrite.io/)
