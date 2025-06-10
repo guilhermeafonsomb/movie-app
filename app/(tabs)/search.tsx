@@ -1,3 +1,4 @@
+import ContainerView from "@/components/ContainerView";
 import MovieCard from "@/components/MovieCard";
 import SearchBar from "@/components/SearchBar";
 import { icons } from "@/constants/icons";
@@ -35,7 +36,7 @@ const Search = () => {
   }, [movies, deferredSearchQuery]);
 
   return (
-    <View className="flex-1 bg-primary">
+    <ContainerView>
       <Image
         className="flex-1 absolute w-full z-0"
         resizeMode="cover"
@@ -99,7 +100,7 @@ const Search = () => {
           ) : null
         }
       />
-    </View>
+    </ContainerView>
   );
 };
 

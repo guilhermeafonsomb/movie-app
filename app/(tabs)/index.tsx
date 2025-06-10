@@ -1,3 +1,4 @@
+import ContainerView from "@/components/ContainerView";
 import MovieCard from "@/components/MovieCard";
 import SearchBar from "@/components/SearchBar";
 import TrendingCard from "@/components/TrendingCard";
@@ -43,7 +44,7 @@ export default function Index() {
   } = useFetch(() => fetchMovies({ query: "" }));
 
   return (
-    <View className="flex-1 bg-primary">
+    <ContainerView>
       <Image className="absolute w-full z-0" source={images.bg} />
       <ScrollView
         className="flex-1 px-5"
@@ -109,6 +110,6 @@ export default function Index() {
           </View>
         )}
       </ScrollView>
-    </View>
+    </ContainerView>
   );
 }

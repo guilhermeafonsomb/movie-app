@@ -2,15 +2,18 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import ButtonOpacity from "@/components/ButtonOpacity";
+import ContainerView from "@/components/ContainerView";
 import Input from "@/components/Input";
 import { icons } from "@/constants/icons";
 import { useAccountStore } from "@/store/account.store";
+import { useRouter } from "expo-router";
 
 const Profile = () => {
+  const router = useRouter();
   const { user } = useAccountStore();
 
   return (
-    <View className="bg-primary flex-1 ">
+    <ContainerView>
       <View className="flex-1 flex items-center max-h-52 relative">
         <View className="flex-1 w-full flex items-end justify-end bg-light-100 opacity-80 ">
           <TouchableOpacity
@@ -48,12 +51,15 @@ const Profile = () => {
             value={user?.email}
           />
 
-          <ButtonOpacity className="mt-4">
-            {user?.name ? "Save" : "Sign up"}
+          <ButtonOpacity
+            className="mt-4"
+            onPress={() => router.push("/sign-in")}
+          >
+            {user?.name ? "Save" : "Sign in"}
           </ButtonOpacity>
         </View>
       </ScrollView>
-    </View>
+    </ContainerView>
   );
 };
 

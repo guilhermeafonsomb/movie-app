@@ -1,3 +1,4 @@
+import ContainerView from "@/components/ContainerView";
 import { icons } from "@/constants/icons";
 import useFetch from "@/hooks/useFeatch";
 import { fetchMovieDetails } from "@/services/api";
@@ -10,7 +11,7 @@ const MovieDetails = () => {
 
   const { data: movie } = useFetch(() => fetchMovieDetails(id as string));
   return (
-    <View className="bg-primary flex-1">
+    <ContainerView>
       <ScrollView
         contentContainerStyle={{
           paddingBottom: 100,
@@ -82,7 +83,7 @@ const MovieDetails = () => {
         />
         <Text className="text-white font-semibold text-base">Go back</Text>
       </TouchableOpacity>
-    </View>
+    </ContainerView>
   );
 };
 
