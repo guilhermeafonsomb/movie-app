@@ -6,7 +6,9 @@ import { images } from "@/constants/images";
 import useFetch from "@/hooks/useFeatch";
 import { fetchMovies } from "@/services/api";
 import { getTrendingMovies } from "@/services/appwrite";
+import { useAccountStore } from "@/store/account.store";
 import { useRouter } from "expo-router";
+import { useEffect } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -18,6 +20,15 @@ import {
 
 export default function Index() {
   const router = useRouter();
+  const { getSession, accountSession } = useAccountStore();
+
+  // fazer uma tela de login/criação de usuário, verificar se tem user para colocar na rota privada
+
+  useEffect(() => {
+    if (!accountSession) {
+      getSession();
+    }
+  }, [accountSession, getSession]);
 
   const {
     data: trendingMovies,

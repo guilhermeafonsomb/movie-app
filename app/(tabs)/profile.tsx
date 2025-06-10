@@ -4,8 +4,11 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import ButtonOpacity from "@/components/ButtonOpacity";
 import Input from "@/components/Input";
 import { icons } from "@/constants/icons";
+import { useAccountStore } from "@/store/account.store";
 
 const Profile = () => {
+  const { user } = useAccountStore();
+
   return (
     <View className="bg-primary flex-1 ">
       <View className="flex-1 flex items-center max-h-52 relative">
@@ -29,31 +32,25 @@ const Profile = () => {
         contentContainerStyle={{ alignItems: "center", padding: 10 }}
       >
         <Text className="text-white font-bold uppercase text-center whitespace-pre-line max-w-72 ">
-          Guilherme Afonso Marques Bail
+          {user?.name}
         </Text>
 
         <View className="flex-1 w-full flex items-center px-4 gap-4 mt-10">
           <Input
             placeholder="USER NAME"
             onChangeText={(text: any) => console.log(text)}
-            value={`Guilherme afonso marques bail`.toUpperCase()}
+            value={user?.name.toUpperCase()}
           />
 
           <Input
             placeholder="e-mail"
             onChangeText={(text: any) => console.log(text)}
-            value={`guilherme@email.com`}
+            value={user?.email}
           />
 
-          <Input
-            placeholder="PASSWORD"
-            secureTextEntry={true}
-            onChangeText={(text: any) => console.log(text)}
-            value={`guilherme`}
-            // iconEye
-          />
-
-          <ButtonOpacity className="mt-4">Save</ButtonOpacity>
+          <ButtonOpacity className="mt-4">
+            {user?.name ? "Save" : "Sign up"}
+          </ButtonOpacity>
         </View>
       </ScrollView>
     </View>

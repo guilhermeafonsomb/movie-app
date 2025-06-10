@@ -83,6 +83,20 @@ export const getSession = async (): Promise<AccountSession | null> => {
   }
 };
 
+export const getUser = async (): Promise<User> => {
+  try {
+    const user = await account.get();
+    return {
+      id: user.$id,
+      name: user.name,
+      email: user.email,
+    };
+  } catch (error) {
+    console.log("Error getting user:", error);
+    throw error;
+  }
+};
+
 export const logout = async (sessionId: string): Promise<void> => {
   try {
     await account.deleteSession(sessionId);

@@ -1,11 +1,10 @@
 import { create } from "zustand";
-import { getSession, logout, signin } from "../services/appwrite";
+import { getSession, getUser, logout, signin } from "../services/appwrite";
 
 interface AccountStore {
   user: User | null;
-  accountSession: boolean;
+  accountSession: AccountSession | null;
   accountLoading: boolean;
-  session?: AccountSession | null;
   signin: (email: string, password: string) => Promise<void>;
   logout: (sessionId: string) => Promise<void>;
   getSession: () => Promise<void>;
@@ -13,7 +12,7 @@ interface AccountStore {
 
 export const useAccountStore = create<AccountStore>((set) => ({
   user: null,
-  accountSession: false,
+  accountSession: null,
   accountLoading: false,
   signin: async (email, password) => {
     set({ accountLoading: true });
@@ -21,7 +20,7 @@ export const useAccountStore = create<AccountStore>((set) => ({
       const user = await signin(email, password);
       const session = await getSession();
 
-      set({ user, accountSession: true, session });
+      set({ user, accountSession: session ? session : null });
     } catch (error) {
       console.error("Signin error:", error);
       throw error;
@@ -33,7 +32,7 @@ export const useAccountStore = create<AccountStore>((set) => ({
     set({ accountLoading: true });
     try {
       await logout(sessionId);
-      set({ user: null, accountSession: false, session: null });
+      set({ user: null, accountSession: null });
     } catch (error) {
       console.error("Logout error:", error);
       throw error;
@@ -44,8 +43,10 @@ export const useAccountStore = create<AccountStore>((set) => ({
   getSession: async () => {
     set({ accountLoading: true });
     try {
+      const user = await getUser();
       const session = await getSession();
-      set({ session, accountSession: !!session });
+
+      set({ accountSession: session, user: user ? user : null });
     } catch (error) {
       console.error("Get session error:", error);
       throw error;
